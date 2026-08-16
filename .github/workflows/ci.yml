@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      # brew style / brew audit want a real tap, not a loose file, so point one
+      # at the checkout instead of copying the cask into Homebrew's prefix.
+      - name: Tap the checkout
+        run: brew tap viethoavnm/librekey "$GITHUB_WORKSPACE"
+
+      - name: Style
+        run: brew style viethoavnm/librekey
+
+      # --online fetches the URL, which catches a sha256 that no longer matches
+      # the release asset - the failure mode the bump workflow could produce.
+      - name: Audit
+        run: brew audit --cask --online viethoavnm/librekey/librekey
