@@ -19,10 +19,25 @@ jobs:
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      # brew style / brew audit want a real tap, not a loose file, so point one
-      # at the checkout instead of copying the cask into Homebrew's prefix.
-      - name: Tap the checkout
-        run: brew tap viethoavnm/librekey "$GITHUB_WORKSPACE"
+      # setup-homebrew already registers this repo as a tap, but pointed at the
+      # pushed branch on GitHub - which on a pull request is not the code under
+      # review. Replace it with the checkout so brew reads exactly these files.
+      - name: Point the tap at the checkout
+        run: |
+          tap_dir="$(brew --repository)/Library/Taps/viethoavnm/homebrew-librekey"
+          rm -rf "$tap_dir"
+          mkdir -p "$(dirname "$tap_dir")"
+          ln -s "$GITHUB_WORKSPACE" "$tap_dir"
+
+      # Homebrew 6 refuses to load casks from a tap outside the official ones
+      # until it is trusted. Older Homebrew has no `brew trust` at all.
+      - name: Trust the tap
+        run: |
+          if brew help trust >/dev/null 2>&1; then
+            brew trust viethoavnm/librekey
+          else
+            echo "Homebrew ở runner chưa có brew trust, bỏ qua."
+          fi
 
       - name: Style
         run: brew style viethoavnm/librekey
