@@ -6,15 +6,14 @@ Việt cho macOS, bản phái sinh của [OpenKey](https://github.com/tuyenvm/Op
 ## Cài đặt
 
 ```sh
-brew install --cask viethoavnm/librekey/librekey
-```
-
-Hoặc tách làm hai bước:
-
-```sh
 brew tap viethoavnm/librekey
+brew trust --cask viethoavnm/librekey/librekey
 brew install --cask librekey
 ```
+
+Từ Homebrew 6, tap ngoài luồng chính thức phải được tin cậy tường minh thì
+Homebrew mới chịu nạp — đó là bước `brew trust`. Nếu muốn tin cả tap (áp dụng cho
+mọi cask thêm vào sau này) thì dùng `brew trust viethoavnm/librekey`.
 
 Sau khi cài, gỡ cờ cách ly của Gatekeeper rồi bật quyền Accessibility:
 
