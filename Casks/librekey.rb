@@ -1,6 +1,6 @@
 cask "librekey" do
-  version "1.2.0"
-  sha256 "cba58a00f97be04e1f8d8bbbf72edec814000ce1e86be44748ab55b42cd7cec0"
+  version "1.3.0"
+  sha256 "f94bb98d9d938574e6b229a4f1fadb95f59d28a9325efb0ece21ca47ed906606"
 
   url "https://github.com/viethoavnm/LibreKey/releases/download/v#{version}/LibreKey-#{version}-macOS.zip"
   name "LibreKey"
